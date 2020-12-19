@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - OdeToFood</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -43,6 +44,9 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
+            <vc:restaurant-count></vc:restaurant-count>
+            @await RenderSectionAsync("footer", required: false)
+            <environment include="Development">Development environment!</environment>
             &copy; 2020 - OdeToFood - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
