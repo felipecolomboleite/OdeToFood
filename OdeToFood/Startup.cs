@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,7 @@ namespace OdeToFood
             });
 
             services.AddScoped<IRestaurantData, SqlRestaurantData>();
+            //services.AddScoped<IRestaurantData, InMemoryRestaurantData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +51,8 @@ namespace OdeToFood
                 app.UseHsts();
             }
 
+            app.Use(SayHelloMiddleware);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseNodeModules();
@@ -63,6 +67,21 @@ namespace OdeToFood
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+        }
+
+        private RequestDelegate SayHelloMiddleware(RequestDelegate arg)
+        {
+            return async ctx =>
+            {
+                if (ctx.Request.Path.StartsWithSegments("/hello"))
+                {
+                    await ctx.Response.WriteAsync("Hello, world!");
+                } else
+                {
+                    await arg(ctx);
+                }
+                
+            };
         }
     }
 }
